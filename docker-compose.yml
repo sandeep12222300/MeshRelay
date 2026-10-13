@@ -1,0 +1,35 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: meshrelay
+      POSTGRES_USER: meshrelay
+      POSTGRES_PASSWORD: meshrelay-local-only
+    ports:
+      - "5432:5432"
+    volumes:
+      - meshrelay-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U meshrelay -d meshrelay"]
+      interval: 5s
+      timeout: 3s
+      retries: 15
+
+  app:
+    build: .
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: postgres
+      DB_URL: jdbc:postgresql://postgres:5432/meshrelay
+      DB_USERNAME: meshrelay
+      DB_PASSWORD: meshrelay-local-only
+      # Hibernate creates or updates tables because schema migrations are not used.
+      DDL_AUTO: update
+      H2_CONSOLE_ENABLED: "false"
+    ports:
+      - "8080:8080"
+
+volumes:
+  meshrelay-postgres:
