@@ -46,7 +46,7 @@ MeshRelay demonstrates a **store-carry-forward** relay model for offline-style p
 
 ### Relay-network diagram (provided)
 
-![image1](image1)
+<img width="867" height="313" alt="image" src="https://github.com/user-attachments/assets/877265fe-d30e-402a-885a-def12337964e" />
 
 The diagram represents this flow in the prototype:
 
